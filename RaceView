@@ -1,0 +1,80 @@
+import java.awt.Image;
+import java.io.IOException;
+import java.net.URL;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.util.*;
+import java.lang.Thread;
+import java.util.Scanner;
+public class RaceView
+{
+    public static void main(){
+        
+        String start = "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/6068525033001/d6ddb7eb-0a89-46d3-b5ff-929ffc49d6bd/main/1280x720/";
+        String end = "/match/image.jpg";
+        double arr [] = {1,30,0};
+        String inside = String.valueOf((int)arr[0]) + "m" + String.valueOf((int)arr[1]) + "s" + String.valueOf((int)arr[2]) + "ms";
+        String full = start + inside + end;
+        
+        
+        Image image = null;
+        
+        Vector<Image> list = new Vector<Image>();
+        
+        for(int i = 0; i < 100; i++){
+            System.out.println(i);
+            try {
+                URL url = new URL(full);
+                image = ImageIO.read(url);
+                list.add(image);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            arr[2] += 1000/10.;
+            if(arr[2] >= 1000){
+                double remainder = arr[2] - 1000;
+                arr[1] += 1;
+                arr[2] = remainder;
+            }
+            if(arr[1] >= 60){
+                arr[0] += 1;
+            }
+            inside = String.valueOf((int)arr[0]) + "m" + String.valueOf((int)arr[1]) + "s" + String.valueOf((int)arr[2]) + "ms";
+            full = start + inside + end;
+        }
+        
+        
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("input 1");
+        String ask = keyboard.next();
+        if(ask.equals("1")){
+            JFrame frame = new JFrame();
+            frame.setSize(1280, 720);
+            
+            for(int i = 0; i < list.size(); i++){
+                JLabel label = new JLabel(new ImageIcon(list.get(i)));
+                frame.add(label);
+                frame.setVisible(true);
+                try{
+                    Thread.sleep((long)(1000/10.));
+                }catch(Exception e) {
+                    System.out.println(e);
+                }
+                frame.remove(label);
+            }   
+        }
+        
+    
+    }
+}
